@@ -40,6 +40,8 @@ public class GooglePlusProfileFragment extends Fragment {
 
     private GooglePlusHelper googlePlusHelper;
 
+    private String email;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -58,7 +60,7 @@ public class GooglePlusProfileFragment extends Fragment {
 
             String personPhotoUrl = getArguments().getString(Constants.PHOTO_URL);
             String name = getArguments().getString(Constants.NAME);
-            String email = getArguments().getString(Constants.EMAIL);
+            email = getArguments().getString(Constants.EMAIL);
 
             Glide.with(getActivity().getApplicationContext()).load(personPhotoUrl)
                     .thumbnail(0.5f)
@@ -74,6 +76,11 @@ public class GooglePlusProfileFragment extends Fragment {
 
     @OnClick(R.id.btn_sign_out)
     public void signOutClicked(){
+//        if (email == null || email.length() == 0){
+//            Toast.makeText(getActivity(), "You are not signed in!", Toast.LENGTH_SHORT).show();
+//            return;
+//        }
+
         Auth.GoogleSignInApi.signOut(googlePlusHelper.getGoogleApiClient()).setResultCallback(
                 new ResultCallback<Status>() {
                     @Override

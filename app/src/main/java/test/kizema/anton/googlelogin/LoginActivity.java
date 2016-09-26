@@ -1,7 +1,9 @@
 package test.kizema.anton.googlelogin;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
@@ -102,8 +104,15 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
             finish();
 
         } else {
-//            Toast.makeText(this, R.string.error_login, Toast.LENGTH_SHORT).show();
+            if (!isInternetAvailable()) {
+                Toast.makeText(this, R.string.error_login, Toast.LENGTH_SHORT).show();
+            }
         }
+    }
+
+    public boolean isInternetAvailable() {
+        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        return (cm.getActiveNetworkInfo() != null);
     }
 
     @Override
