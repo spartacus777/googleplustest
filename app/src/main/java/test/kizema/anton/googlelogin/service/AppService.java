@@ -20,7 +20,7 @@ import test.kizema.anton.googlelogin.helpers.Saver;
 
 public class AppService extends Service {
 
-    private static final int DELAY_SEC = 1;
+    private static final int DELAY_SEC = 10;
 
     private Looper mServiceLooper;
     private ServiceHandler mServiceHandler;
