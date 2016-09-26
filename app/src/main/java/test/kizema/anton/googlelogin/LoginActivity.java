@@ -12,6 +12,8 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
@@ -23,37 +25,44 @@ import com.google.android.gms.common.api.OptionalPendingResult;
 import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.api.Status;
 
-public class LoginActivity extends AppCompatActivity implements View.OnClickListener,
-        GoogleApiClient.OnConnectionFailedListener {
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
+
+public class LoginActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener {
 
     private static final String TAG = LoginActivity.class.getSimpleName();
-    private static final int RC_SIGN_IN = 007;
+    private static final int RC_SIGN_IN = 100;
 
     private GoogleApiClient mGoogleApiClient;
     private ProgressDialog mProgressDialog;
 
-    private SignInButton btnSignIn;
-    private Button btnSignOut, btnRevokeAccess;
-    private LinearLayout llProfileLayout;
-    private ImageView imgProfilePic;
-    private TextView txtName, txtEmail;
+    @BindView(R.id.btn_sign_in)
+    public SignInButton btnSignIn;
+
+    @BindView(R.id.btn_sign_out)
+    public Button btnSignOut;
+
+    @BindView(R.id.btn_revoke_access)
+    public Button btnRevokeAccess;
+
+    @BindView(R.id.llProfile)
+    public LinearLayout llProfileLayout;
+
+    @BindView(R.id.imgProfilePic)
+    public ImageView imgProfilePic;
+
+    @BindView(R.id.txtName)
+    public TextView txtName;
+
+    @BindView(R.id.txtEmail)
+    public TextView txtEmail;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-
-        btnSignIn = (SignInButton) findViewById(R.id.btn_sign_in);
-        btnSignOut = (Button) findViewById(R.id.btn_sign_out);
-        btnRevokeAccess = (Button) findViewById(R.id.btn_revoke_access);
-        llProfileLayout = (LinearLayout) findViewById(R.id.llProfile);
-        imgProfilePic = (ImageView) findViewById(R.id.imgProfilePic);
-        txtName = (TextView) findViewById(R.id.txtName);
-        txtEmail = (TextView) findViewById(R.id.txtEmail);
-
-        btnSignIn.setOnClickListener(this);
-        btnSignOut.setOnClickListener(this);
-        btnRevokeAccess.setOnClickListener(this);
+        ButterKnife.bind(this);
 
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestEmail()
@@ -69,14 +78,14 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         btnSignIn.setScopes(gso.getScopeArray());
     }
 
-
-    private void signIn() {
+    @OnClick(R.id.btn_sign_in)
+    public void signInClicked(){
         Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);
         startActivityForResult(signInIntent, RC_SIGN_IN);
     }
 
-
-    private void signOut() {
+    @OnClick(R.id.btn_sign_out)
+    public void signOutClicked(){
         Auth.GoogleSignInApi.signOut(mGoogleApiClient).setResultCallback(
                 new ResultCallback<Status>() {
                     @Override
@@ -86,7 +95,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 });
     }
 
-    private void revokeAccess() {
+    @OnClick(R.id.btn_revoke_access)
+    public void revikeAccessClicked(){
         Auth.GoogleSignInApi.revokeAccess(mGoogleApiClient).setResultCallback(
                 new ResultCallback<Status>() {
                     @Override
@@ -117,35 +127,17 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             txtName.setText(personName);
             txtEmail.setText(email);
 
-//            Glide.with(getApplicationContext()).load(personPhotoUrl)
-//                    .thumbnail(0.5f)
-//                    .crossFade()
-//                    .diskCacheStrategy(DiskCacheStrategy.ALL)
-//                    .into(imgProfilePic);
+            Glide.with(getApplicationContext()).load(personPhotoUrl)
+                    .thumbnail(0.5f)
+                    .error(R.mipmap.ic_launcher)
+                    .crossFade()
+                    .diskCacheStrategy(DiskCacheStrategy.ALL)
+                    .into(imgProfilePic);
 
             updateUI(true);
         } else {
             // Signed out, show unauthenticated UI.
             updateUI(false);
-        }
-    }
-
-    @Override
-    public void onClick(View v) {
-        int id = v.getId();
-
-        switch (id) {
-            case R.id.btn_sign_in:
-                signIn();
-                break;
-
-            case R.id.btn_sign_out:
-                signOut();
-                break;
-
-            case R.id.btn_revoke_access:
-                revokeAccess();
-                break;
         }
     }
 
