@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "37819583705",
+    "project_id": "project-511923495545145258"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:37819583705:android:094ea7a0489fa128",
+        "android_client_info": {
+          "package_name": "test.kizema.anton.googlelogin"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "37819583705-3r01asv6ocqnsvusmn2qe0gsp0vu0njd.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "test.kizema.anton.googlelogin",
+            "certificate_hash": "74733B25C2596A8F80FE20838A39507E26C0109E"
+          }
+        },
+        {
+          "client_id": "37819583705-al3bis6768a35ote4nt6g13u9546ahig.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAMBGRbpOScmlHAin3kl74Ie5q3rcnsw90"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 1
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
