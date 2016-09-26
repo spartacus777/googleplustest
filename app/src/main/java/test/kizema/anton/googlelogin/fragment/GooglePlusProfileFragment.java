@@ -19,7 +19,7 @@ import com.google.android.gms.common.api.Status;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import test.kizema.anton.googlelogin.LoginActivity;
+import test.kizema.anton.googlelogin.activity.LoginActivity;
 import test.kizema.anton.googlelogin.R;
 import test.kizema.anton.googlelogin.helpers.Constants;
 import test.kizema.anton.googlelogin.helpers.GooglePlusHelper;
@@ -76,10 +76,6 @@ public class GooglePlusProfileFragment extends Fragment {
 
     @OnClick(R.id.btn_sign_out)
     public void signOutClicked(){
-//        if (email == null || email.length() == 0){
-//            Toast.makeText(getActivity(), "You are not signed in!", Toast.LENGTH_SHORT).show();
-//            return;
-//        }
 
         Auth.GoogleSignInApi.signOut(googlePlusHelper.getGoogleApiClient()).setResultCallback(
                 new ResultCallback<Status>() {

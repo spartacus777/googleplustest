@@ -40,6 +40,7 @@ public class AppService extends Service {
         public ServiceHandler(Looper looper) {
             super(looper);
         }
+
         @Override
         public void handleMessage(Message msg) {
             startWork();
@@ -48,7 +49,6 @@ public class AppService extends Service {
 
     public class LocalBinder extends Binder {
         public AppService getService() {
-            // Return this instance of LocalService so clients can call public methods
             return AppService.this;
         }
     }
@@ -60,11 +60,10 @@ public class AppService extends Service {
         Log.d("LOC", "onCreate ");
         binder = new LocalBinder();
 
-        HandlerThread thread = new HandlerThread("ServiceStartArguments",
+        HandlerThread thread = new HandlerThread("ServiceThread",
                 Process.THREAD_PRIORITY_BACKGROUND);
         thread.start();
 
-        // Get the HandlerThread's Looper and use it for our Handler
         mServiceLooper = thread.getLooper();
         mServiceHandler = new ServiceHandler(mServiceLooper);
     }
@@ -89,28 +88,28 @@ public class AppService extends Service {
                 e.printStackTrace();
             }
 
-            if (!shouldWork){
+            if (!shouldWork) {
                 return;
             }
 
             final int rand = new Random().nextInt(1000000);
 
-            Saver.getInstance().set(rand);
+            Saver.getInstance().setRand(rand);
 
-            if (listener != null){
-                App.getUiHandler().post(new Runnable() {
-                    @Override
-                    public void run() {
+            App.getUiHandler().post(new Runnable() {
+                @Override
+                public void run() {
+                    if (listener != null) {
                         listener.setRandomNumber(rand);
+                    } else {
+                        NotificationFactory.send(rand);
                     }
-                });
-            } else {
-                NotificationFactory.send(rand);
-            }
+                }
+            });
         }
     }
 
-    public void setCallback(ServiceConnected listener){
+    public void setCallback(ServiceConnected listener) {
         this.listener = listener;
     }
 

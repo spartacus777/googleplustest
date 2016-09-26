@@ -1,13 +1,11 @@
 package test.kizema.anton.googlelogin.helpers;
 
+//emulates local DB
 public class Saver {
-
-    //emulates local DB
 
     private static Saver instance;
 
     private volatile int rand;
-
     private volatile boolean isServiceStopped = false;
 
     private Saver(){}
@@ -20,11 +18,11 @@ public class Saver {
         return instance;
     }
 
-    public void set(int rand){
+    public void setRand(int rand){
         this.rand = rand;
     }
 
-    public int get(){
+    public int getRand(){
         return rand;
     }
 

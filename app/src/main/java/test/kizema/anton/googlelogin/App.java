@@ -25,11 +25,18 @@ public class App extends Application {
         NotificationFactory.init(context);
 
         LeakCanary.install(this);
+
+        startService();
     }
 
     public static void startService(){
         Intent intent = new Intent(context, AppService.class);
         context.startService(intent);
+    }
+
+    public static void stopService(){
+        Intent intent = new Intent(context, AppService.class);
+        context.stopService(intent);
     }
 
     public static Handler getUiHandler(){

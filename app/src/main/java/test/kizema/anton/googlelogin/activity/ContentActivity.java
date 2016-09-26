@@ -1,4 +1,4 @@
-package test.kizema.anton.googlelogin;
+package test.kizema.anton.googlelogin.activity;
 
 import android.content.ComponentName;
 import android.content.Context;
@@ -9,7 +9,6 @@ import android.os.IBinder;
 import android.support.v4.view.PagerTabStrip;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.widget.Button;
 import android.widget.TextView;
 
@@ -19,6 +18,8 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import test.kizema.anton.googlelogin.App;
+import test.kizema.anton.googlelogin.R;
 import test.kizema.anton.googlelogin.adapter.ViewPagerAdapter;
 import test.kizema.anton.googlelogin.adapter.ViewPagerAdapter.DataHolder;
 import test.kizema.anton.googlelogin.fragment.DemoFragment;
@@ -29,8 +30,6 @@ import test.kizema.anton.googlelogin.helpers.Saver;
 import test.kizema.anton.googlelogin.service.AppService;
 
 public class ContentActivity extends AppCompatActivity implements AppService.ServiceConnected {
-
-    private static final int INVALID_INT = -328233;
 
     @BindView(R.id.tvServiceResult)
     public TextView tvServiceResult;
@@ -74,25 +73,22 @@ public class ContentActivity extends AppCompatActivity implements AppService.Ser
         ButterKnife.bind(this);
 
         init();
-        NotificationFactory.cancelNotification();
     }
 
     @Override
     protected void onStart() {
         super.onStart();
-        Log.d("LOC", "onStart() ");
 
         if (!Saver.getInstance().isServiceStopped()) {
-            Intent intent = new Intent(this, AppService.class);
-            bindService(intent, mConnection, Context.BIND_AUTO_CREATE);
+            bindService();
         }
 
+        NotificationFactory.cancelNotification();
     }
 
     @Override
     protected void onStop() {
         super.onStop();
-        Log.d("LOC", "onStop() ");
 
         if (!Saver.getInstance().isServiceStopped()) {
             unbindService(mConnection);
@@ -107,6 +103,11 @@ public class ContentActivity extends AppCompatActivity implements AppService.Ser
         }
     }
 
+    private void bindService(){
+        Intent intent = new Intent(this, AppService.class);
+        bindService(intent, mConnection, Context.BIND_AUTO_CREATE);
+    }
+
     private void init() {
         viewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager(), this, getAdapterData());
         pager.setAdapter(viewPagerAdapter);
@@ -116,7 +117,7 @@ public class ContentActivity extends AppCompatActivity implements AppService.Ser
 
     private void getRandData() {
         setServiceBtnText(Saver.getInstance().isServiceStopped());
-        setRandomNumber(Saver.getInstance().get());
+        setRandomNumber(Saver.getInstance().getRand());
     }
 
     private List<DataHolder> getAdapterData() {
@@ -146,14 +147,15 @@ public class ContentActivity extends AppCompatActivity implements AppService.Ser
         if (!Saver.getInstance().isServiceStopped()) {
             unbindService(mConnection);
             unbindService();
-            Intent intent = new Intent(this, AppService.class);
-            stopService(intent);
+
+            App.stopService();
+
             Saver.getInstance().setServiceStopped(true);
         } else {
             App.startService();
 
-            Intent intent = new Intent(this, AppService.class);
-            bindService(intent, mConnection, Context.BIND_AUTO_CREATE);
+            bindService();
+
             Saver.getInstance().setServiceStopped(false);
         }
 

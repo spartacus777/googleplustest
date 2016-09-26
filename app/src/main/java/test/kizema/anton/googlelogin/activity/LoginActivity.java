@@ -1,4 +1,4 @@
-package test.kizema.anton.googlelogin;
+package test.kizema.anton.googlelogin.activity;
 
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -22,6 +22,7 @@ import com.google.android.gms.common.api.ResultCallback;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import test.kizema.anton.googlelogin.R;
 import test.kizema.anton.googlelogin.helpers.Constants;
 import test.kizema.anton.googlelogin.helpers.GooglePlusHelper;
 
@@ -85,7 +86,6 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
     private void handleSignInResult(GoogleSignInResult result) {
         Log.d(TAG, "handleSignInResult:" + result.isSuccess());
         if (result.isSuccess()) {
-            // Signed in successfully, show authenticated UI.
             GoogleSignInAccount acct = result.getSignInAccount();
 
             String personName = acct.getDisplayName();
@@ -119,7 +119,6 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        // Result returned from launching the Intent from GoogleSignInApi.getSignInIntent(...);
         if (requestCode == RC_SIGN_IN) {
             GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
             handleSignInResult(result);
